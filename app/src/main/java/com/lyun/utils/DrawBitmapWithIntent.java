@@ -34,11 +34,7 @@ public class DrawBitmapWithIntent {
 
     public DrawBitmapWithIntent(Activity context) {
         mContext = context;
-        if (hasExtraSDCard()){
-            sdcard = Environment.getExternalStorageDirectory();
-        }else {
-            Toast.makeText(mContext, "手机没有sdcard", Toast.LENGTH_SHORT).show();
-        }
+        sdcard = Environment.getExternalStorageDirectory();
 
     }
 
@@ -46,24 +42,35 @@ public class DrawBitmapWithIntent {
      * 使用手机相机拍摄图片
      */
     public void getBitmapFromCamera() {
-        intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        File file = new File(sdcard, fileName);
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(file));
-        mContext.startActivityForResult(intent, BITMAP_FROM_CAMERA);
+        if (hasExtraSDCard()) {
+            intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            File file = new File(sdcard, fileName);
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(file));
+            mContext.startActivityForResult(intent, BITMAP_FROM_CAMERA);
+        }else {
+            Toast.makeText(mContext, "手机没有sdcard", Toast.LENGTH_SHORT).show();
+        }
+
     }
 
     /**
      * 获取手机相册中的图片
      */
     public void getBitmapFromPhotoAlbum() {
-        intent = new Intent(Intent.ACTION_PICK, null);
-        intent.setDataAndType(
-                MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
-        mContext.startActivityForResult(intent, BITMAP_FROM_PHOTO_ALBUM);
+        if (hasExtraSDCard()){
+            intent = new Intent(Intent.ACTION_PICK, null);
+            intent.setDataAndType(
+                    MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
+            mContext.startActivityForResult(intent, BITMAP_FROM_PHOTO_ALBUM);
+        }else {
+            Toast.makeText(mContext, "手机没有sdcard", Toast.LENGTH_SHORT).show();
+        }
+
     }
 
     /**
      * 判断手机是否有SDCrad
+     *
      * @return true: 有sdcard
      */
     private boolean hasExtraSDCard() {
@@ -72,6 +79,7 @@ public class DrawBitmapWithIntent {
 
     /**
      * 截取图片
+     *
      * @param uri 文件路径
      */
     public void startPhotoZoom(Uri uri) {
@@ -91,8 +99,9 @@ public class DrawBitmapWithIntent {
 
     /**
      * 把获取到的图片设置在ImageView上
+     *
      * @param picdata 包含数据的intent
-     * @param image  要设置图片的ImageView
+     * @param image   要设置图片的ImageView
      */
     public void setPicToView(Intent picdata, ImageView image) {
         Bundle extras = picdata.getExtras();
