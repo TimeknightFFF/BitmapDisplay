@@ -62,10 +62,18 @@ public class DrawBitmapWithIntent {
         mContext.startActivityForResult(intent, BITMAP_FROM_PHOTO_ALBUM);
     }
 
+    /**
+     * 判断手机是否有SDCrad
+     * @return true: 有sdcard
+     */
     private boolean hasExtraSDCard() {
         return Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState());
     }
 
+    /**
+     * 截取图片
+     * @param uri 文件路径
+     */
     public void startPhotoZoom(Uri uri) {
         Intent intent = new Intent("com.android.camera.action.CROP");
         intent.setDataAndType(uri, "image/png");
@@ -81,6 +89,11 @@ public class DrawBitmapWithIntent {
         mContext.startActivityForResult(intent, CROP_BITMAP);
     }
 
+    /**
+     * 把获取到的图片设置在ImageView上
+     * @param picdata 包含数据的intent
+     * @param image  要设置图片的ImageView
+     */
     public void setPicToView(Intent picdata, ImageView image) {
         Bundle extras = picdata.getExtras();
         // 将图片放在/sdcard下
