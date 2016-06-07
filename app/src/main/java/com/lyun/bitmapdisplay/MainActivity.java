@@ -41,7 +41,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-
         switch (requestCode){
             case DrawBitmapWithIntent.BITMAP_FROM_CAMERA:
                 File f = new File(sdcard, DrawBitmapWithIntent.fileName);
@@ -49,6 +48,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case DrawBitmapWithIntent.CROP_BITMAP:
                 if (data != null) {
+                    // 参数image是要设置图片的ImageView的对象
                     draw.setPicToView(data, image);
                 }
                 break;
@@ -60,7 +60,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             default:
                 break;
         }
-
         super.onActivityResult(requestCode, resultCode, data);
     }
 
