@@ -1,3 +1,17 @@
 <resources>
     <string name="app_name">BitmapDisplay</string>
+
+    <!-- pull-->
+    <integer name="default_anim_duration">250</integer>
+    <string name="last_refresh">上次刷新：</string>
+    <string name="pull_to_refresh_pull_label">下拉刷新</string>
+    <string name="pull_to_refresh_release_label">松开即可刷新</string>
+    <string name="pull_to_refresh_refreshing_label">给力刷新中&#8230;</string>
+    <string name="pull_up_to_refresh_pull_label">上拉加载更多</string>
+    <string name="pull_up_to_refresh_release_label">松开加载</string>
+    <string name="pull_up_to_refresh_refreshing_label">加载中&#8230;</string>
+    <string name="pull_up_last_refresh">上次加载：</string>
+    <string name="pull_to_refresh_from_bottom_pull_label">@string/pull_to_refresh_pull_label</string>
+    <string name="pull_to_refresh_from_bottom_release_label">@string/pull_to_refresh_release_label</string>
+    <string name="pull_to_refresh_from_bottom_refreshing_label">@string/pull_to_refresh_refreshing_label</string>
 </resources>
