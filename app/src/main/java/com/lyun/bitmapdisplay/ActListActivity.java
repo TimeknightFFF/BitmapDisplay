@@ -10,6 +10,8 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.google.gson.Gson;
+import com.lyun.bean.MeetingData;
 import com.lyun.pullrefreshlistview.PullToRefreshBase;
 import com.lyun.pullrefreshlistview.PullToRefreshListView;
 
@@ -49,9 +51,10 @@ public class ActListActivity extends AppCompatActivity implements AdapterView.On
 
             @Override
             public void onPullUpToRefresh() {
+                finishPull();
             }
         });
-        activity_names.add(0,"MainActivity");
+        activity_names.add(0, "MainActivity");
         activity_names.add(1,"LoadBigBitmapActivity");
         activity_names.add(2,"ShowImageAct");
         activity_names.add(3,"ListImageAct");
@@ -61,6 +64,35 @@ public class ActListActivity extends AppCompatActivity implements AdapterView.On
         list_activity.setAdapter(new ArrayAdapter<String>(ActListActivity.this, android.R.layout.simple_list_item_1, activity_names));
         list_activity.setOnItemClickListener(this);
 
+        gsonFormatTest();
+    }
+
+    private void gsonFormatTest() {
+        String jsonStr = "{\n" +
+                "  \"code\": 0,\n" +
+                "  \"msg\": \"轮播会议获取成功\",\n" +
+                "  \"records\": [\n" +
+                "    {\n" +
+                "      \"joinNumber\": 3,\n" +
+                "      \"id\": 10,\n" +
+                "      \"startDateStr\": \"2016-10-26 09:00 星期三\",\n" +
+                "      \"theme\": \"2016年度海外高层次人群聚会\"\n" +
+                "    },\n" +
+                "    {\n" +
+                "      \"joinNumber\": 3,\n" +
+                "      \"id\": 1,\n" +
+                "      \"startDateStr\": \"2016-10-24 08:00 星期一\",\n" +
+                "      \"theme\": \"2016年度苏州医疗会议\"\n" +
+                "    }\n" +
+                "  ]\n" +
+                "}";
+
+        Gson gson = new Gson();
+        MeetingData meetingData = gson.fromJson(jsonStr, MeetingData.class);
+        List<MeetingData.RecordsEntity> records = meetingData.getRecords();
+        for (MeetingData.RecordsEntity entity: records){
+            System.out.println("entity: " + entity.getJoinNumber() + " theme: " + entity.getTheme());
+        }
     }
 
     private void finishPull() {

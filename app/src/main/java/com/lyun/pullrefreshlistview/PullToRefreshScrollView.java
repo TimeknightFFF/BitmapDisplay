@@ -3,6 +3,7 @@ package com.lyun.pullrefreshlistview;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.view.View;
 import android.widget.ScrollView;
 
 import com.lyun.bitmapdisplay.R;
@@ -12,26 +13,16 @@ public class PullToRefreshScrollView extends PullToRefreshBase<ScrollView> {
 
 	public PullToRefreshScrollView(Context context) {
 		super(context);
-
-		/**
-		 * Added so that by default, Pull-to-Refresh refreshes the page
-		 */
-//		setOnRefreshListener(defaultOnRefreshListener);
 	}
 
 
 	public PullToRefreshScrollView(Context context, AttributeSet attrs) {
 		super(context, attrs);
-
-		/**
-		 * Added so that by default, Pull-to-Refresh refreshes the page
-		 */
-//		setOnRefreshListener(defaultOnRefreshListener);
 	}
 
-	@Override
+    @Override
 	protected ScrollView createRefreshableView(Context context, AttributeSet attrs) {
-		ScrollView scrollView = new ScrollView(context, attrs);
+		ScrollView scrollView = new ScrollView(context,attrs);
 		scrollView.setId(R.id.scrollview);
 		return scrollView;
 	}
@@ -43,16 +34,13 @@ public class PullToRefreshScrollView extends PullToRefreshBase<ScrollView> {
 
 	@Override
 	protected boolean isReadyForPullUp() {
-		ScrollView view = getRefreshableView();
-		int off=view.getScrollY()+view.getHeight()-view.getChildAt(0).getHeight();
-		if(off==0){
-			return true;
-		}else{
-			return false;
+		View scrollViewChild = mRefreshableView.getChildAt(0);
+		if (null != scrollViewChild) {
+			return mRefreshableView.getScrollY() >= (scrollViewChild.getHeight() - getHeight());
 		}
-       
+		return false;
 	}
-	
+
 	public void setOnSingleClick(OnSingleClick onSingleClick){
 	    super.setOnSingleClick(onSingleClick);
 	}

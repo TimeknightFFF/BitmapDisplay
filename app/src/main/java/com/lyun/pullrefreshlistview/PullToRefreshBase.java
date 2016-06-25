@@ -22,6 +22,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Parcelable;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
@@ -240,13 +241,15 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout {
 
         switch (action) {
             case MotionEvent.ACTION_MOVE: {
+                Log.d("--DEBUG--","Pull  onInterceptTouchEvent " + isReadyForPull()+" isRefreshing: "+isRefreshing()+
+                " mDisableScrollingWhileRefreshing: "+ mDisableScrollingWhileRefreshing);
                 if (isReadyForPull() && !(isRefreshing() && mDisableScrollingWhileRefreshing)) {
 
                     final float y = event.getY();
                     final float dy = y - mLastMotionY;
                     final float yDiff = Math.abs(dy);
                     final float xDiff = Math.abs(event.getX() - mLastMotionX);
-
+                    Log.d("--DEBUG--","Pull  y: "+y+" dy: "+dy+" yDiff: "+yDiff+" xDiff: "+xDiff+" mTouchSlop: "+mTouchSlop);
                     if (yDiff > mTouchSlop && (!mFilterTouchEvents || yDiff > xDiff)) {
                         if (mMode.canPullDown() && dy >= 1f && isReadyForPullDown()) {
                             mLastMotionY = y;
@@ -277,7 +280,7 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout {
                 break;
             }
         }
-
+        Log.d("--DEBUG--","Pull onInter: "+mIsBeingDragged);
         return mIsBeingDragged;
     }
 
@@ -320,6 +323,7 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout {
             case MotionEvent.ACTION_MOVE: {
                 if (mIsBeingDragged) {
                     mLastMotionY = event.getY();
+                    Log.d("--DEBUG--","Pull OnTouchEvent: action_move"+mLastMotionY);
                     pullEvent();
                     return true;
                 }
@@ -329,6 +333,7 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout {
             case MotionEvent.ACTION_DOWN: {
                 if (isReadyForPull()) {
                     mLastMotionY = mInitialMotionY = event.getY();
+                    Log.d("--DEBUG--","Pull OnTouchEvent: action_down"+mLastMotionY);
                     return true;
                 }
                 break;
@@ -640,7 +645,7 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout {
     }
 
     protected void addRefreshableView(Context context, T refreshableView) {
-        addView(refreshableView, new LayoutParams(LayoutParams.FILL_PARENT, 0, 1.0f));
+        addView(refreshableView, new LayoutParams(LayoutParams.MATCH_PARENT, 0, 1.0f));
     }
 
     /**
@@ -866,7 +871,7 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout {
             removeView(mFooterLayout);
         }
         if (mMode.canPullUp()) {
-            addView(mFooterLayout, new LayoutParams(ViewGroup.LayoutParams.FILL_PARENT,
+            addView(mFooterLayout, new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.WRAP_CONTENT));
 
         }

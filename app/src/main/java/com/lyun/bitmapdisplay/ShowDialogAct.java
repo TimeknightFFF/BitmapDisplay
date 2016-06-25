@@ -4,10 +4,10 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
-import android.view.LayoutInflater;
+import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ScrollView;
 
 import com.lyun.pullrefreshlistview.PullToRefreshBase;
 import com.lyun.pullrefreshlistview.PullToRefreshScrollView;
@@ -42,18 +42,20 @@ public class ShowDialogAct extends AppCompatActivity {
                 finishPull();
             }
         });
-        ScrollView scrollView1 = scrollView.getRefreshableView();
-        View view = LayoutInflater.from(ShowDialogAct.this).inflate(R.layout.show_dialog_layout, null);
-        scrollView1.addView(view);
+        int childCount = scrollView.getChildCount();
+        for (int i=0; i< childCount; i++){
+            Log.d("--DEBUG--","childId: "+scrollView.getChildAt(i).getId());
+        }
+        Log.d("--DEBUG--"," dialog: "+R.id.dialog+" popup: "+R.id.popup+" linear: "+R.id.pull_scroll+" - "+R.id.view_parent+" scroll: "+R.id.pull_scroll);
         final DialogView dialogView = new DialogView();
 
-        view.findViewById(R.id.dialog).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.dialog).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dialogView.showDialog(ShowDialogAct.this);
             }
         });
-        final Button pop = (Button) view.findViewById(R.id.popup);
+        final Button pop = (Button) findViewById(R.id.popup);
         pop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -67,12 +69,28 @@ public class ShowDialogAct extends AppCompatActivity {
             @Override
             public void run() {
                 try {
-                    sleep(4000);
+                    sleep(1000);
                     handler.sendEmptyMessage(0);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
             }
         }.start();
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        switch (event.getAction()){
+            case MotionEvent.ACTION_DOWN:
+                Log.d("--DEBUG--","ShowDialog action_down: "+MotionEvent.ACTION_DOWN);
+                break;
+            case MotionEvent.ACTION_MOVE:
+                Log.d("--DEBUG--","ShowDialog action_down: "+MotionEvent.ACTION_MOVE);
+                break;
+            case MotionEvent.ACTION_UP:
+                Log.d("--DEBUG--","ShowDialog action_down: "+MotionEvent.ACTION_UP);
+                break;
+        }
+        return super.onTouchEvent(event);
     }
 }
